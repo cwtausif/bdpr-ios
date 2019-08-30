@@ -13,7 +13,9 @@ class AboutVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let logo = UIImage(named: "logowhite")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
     }
     
 

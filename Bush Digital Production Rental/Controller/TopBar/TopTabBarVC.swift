@@ -67,7 +67,7 @@ class TopTabBarVC: GLViewPagerViewController, HomeVCDelegate {
                     
                     self.setPagerValues()
                 } else {
-                    
+                    Utility.showAlertWithTitle(title: appName, withMessage: response["message"] as! String, withNavigation: self)
                 }
             }
             

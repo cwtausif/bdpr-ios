@@ -8,23 +8,75 @@
 
 import UIKit
 
-class ContactVC: UIViewController {
+var appName = "Bush Digital Production Rental"
 
+class ContactVC: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+
+    @IBOutlet weak var nameTxt: UITextField!
+    @IBOutlet weak var emailTxt: UITextField!
+    @IBOutlet weak var descripTxt: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let logo = UIImage(named: "logowhite")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
-    */
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    
+    @IBAction func sendTap(_ sender: Any) {
+        
+        if nameTxt.text?.count == 0 {
+            Utility.showAlertWithTitle(title: appName, withMessage: "Name is required!", withNavigation: self)
+            return
+        }
+        if emailTxt.text?.count == 0 {
+            Utility.showAlertWithTitle(title: appName, withMessage: "Email is required!", withNavigation: self)
+            return
+        }
+        if descripTxt.text?.count == 0 {
+            Utility.showAlertWithTitle(title: appName, withMessage: "Some info is required to contact us!", withNavigation: self)
+            return
+        }
+        
+        var dic = Dictionary<String,AnyObject>()
+        
+        dic["contact"] = true as AnyObject
+        dic["name"] = nameTxt.text as AnyObject
+        dic["email"] = emailTxt.text as AnyObject
+        dic["message"] = descripTxt.text as AnyObject
+        
+        
+        Utility.shared.showSpinner()
+        ALFWebService.sharedInstance.doGetData(parameters: dic, method: "api.php", success: { (response) in
+            Utility.shared.hideSpinner()
+            print(response)
+            
+            if let status = response["status"] as? Bool {
+                if status {
+                   Utility.showAlertWithTitle(title: appName, withMessage: response["message"] as! String, withNavigation: self)
+                } else {
+                   Utility.showAlertWithTitle(title: appName, withMessage: response["message"] as! String, withNavigation: self)
+                }
+            }
+            
+        }) { (response) in
+            Utility.shared.hideSpinner()
+            print(response)
+        }
+    }
+    
+    
 
 }

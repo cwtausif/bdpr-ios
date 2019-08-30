@@ -40,5 +40,6 @@ enum viewControllers: String {
     AboutVC = "AboutVC",
     ContactVC = "ContactVC",
     MoreVC = "MoreVC",
-    DetailVC = "DetailVC"
+    DetailVC = "DetailVC",
+    TermPrivacyVC = "TermPrivacyVC"
 }
